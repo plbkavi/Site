@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} | Media Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <a class="logo" href="/">Media Hub</a>
+
+            <nav class="main-nav" aria-label="Основная навигация">
+                <a href="/">Главная</a>
+                <a href="/weather">Погода</a>
+                <span class="nav-soon">Фильмы — позже</span>
+                <span class="nav-soon">Аниме — позже</span>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <span>Media Hub · личный проект</span>
+            <span>© <span id="current-year"></span></span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', path='/app.js') }}"></script>
+</body>
+</html>

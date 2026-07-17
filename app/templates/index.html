@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">Ваш личный мини-сервис</p>
+    <h1>Media Hub</h1>
+    <p class="hero-text">
+        Здесь постепенно появятся погода, фильмы, сериалы, аниме
+        и общий список того, что стоит посмотреть.
+    </p>
+    <a class="button" href="/weather">Открыть погоду</a>
+</section>
+
+<section class="feature-grid">
+    <article class="feature-card">
+        <div class="feature-icon">🌤️</div>
+        <h2>Погода</h2>
+        <p>Поиск города, текущая погода и прогноз на ближайшие дни.</p>
+        <a href="/weather">Перейти к погоде →</a>
+    </article>
+
+    <article class="feature-card feature-card-muted">
+        <div class="feature-icon">🎬</div>
+        <h2>Фильмы и сериалы</h2>
+        <p>Поиск и личный список «посмотреть» появятся на следующем этапе.</p>
+    </article>
+
+    <article class="feature-card feature-card-muted">
+        <div class="feature-icon">🍥</div>
+        <h2>Аниме</h2>
+        <p>Поиск аниме и список просмотра добавим после раздела фильмов.</p>
+    </article>
+</section>
+{% endblock %}

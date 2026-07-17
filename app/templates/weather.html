@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Open-Meteo</p>
+    <h1>Погода</h1>
+    <p>Введите город, чтобы увидеть текущую погоду и прогноз на 5 дней.</p>
+</section>
+
+<form class="search-form" action="/weather" method="get">
+    <label class="sr-only" for="city">Название города</label>
+    <input
+        id="city"
+        name="city"
+        type="search"
+        value="{{ city }}"
+        placeholder="Например: Helsinki, Москва, Tokyo"
+        maxlength="100"
+        required
+        autofocus
+    >
+    <button type="submit">Найти</button>
+</form>
+
+{% if error %}
+<div class="message message-error" role="alert">
+    {{ error }}
+</div>
+{% endif %}
+
+{% if weather %}
+<section class="weather-result">
+    <div class="current-weather">
+        <div>
+            <p class="eyebrow">Сейчас</p>
+            <h2>{{ weather.place_name }}</h2>
+            <p class="timezone">Часовой пояс: {{ weather.timezone }}</p>
+        </div>
+
+        <div class="current-main">
+            <span class="weather-icon">{{ weather.current.icon }}</span>
+            <span class="current-temperature">{{ weather.current.temperature }}°</span>
+        </div>
+
+        <p class="weather-description">{{ weather.current.description }}</p>
+
+        <div class="weather-details">
+            <div>
+                <span>Ощущается как</span>
+                <strong>{{ weather.current.apparent_temperature }}°C</strong>
+            </div>
+            <div>
+                <span>Ветер</span>
+                <strong>{{ weather.current.wind_speed }} км/ч</strong>
+            </div>
+        </div>
+    </div>
+
+    <section class="forecast-section">
+        <h2>Прогноз на 5 дней</h2>
+
+        <div class="forecast-grid">
+            {% for day in weather.days %}
+            <article class="forecast-card">
+                <time datetime="{{ day.date }}">{{ day.date }}</time>
+                <span class="forecast-icon">{{ day.icon }}</span>
+                <p>{{ day.description }}</p>
+                <div class="forecast-temperature">
+                    <strong>{{ day.temp_max }}°</strong>
+                    <span>{{ day.temp_min }}°</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+</section>
+{% elif not city %}
+<section class="empty-state">
+    <span>🔎</span>
+    <p>Начните с поиска города выше.</p>
+</section>
+{% endif %}
+{% endblock %}
