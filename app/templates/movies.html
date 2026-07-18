@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">OMDb</p>
+    <h1>Фильмы и сериалы</h1>
+    <p>Ищите фильмы и сериалы. Список «посмотреть» добавим следующим этапом.</p>
+</section>
+
+<form class="search-form" action="/movies" method="get">
+    <label class="sr-only" for="query">Название фильма или сериала</label>
+    <input
+        id="query"
+        name="query"
+        type="search"
+        value="{{ query }}"
+        placeholder="Например: Interstellar, Breaking Bad, Гарри Поттер"
+        maxlength="100"
+        required
+        autofocus
+    >
+    <button type="submit">Найти</button>
+</form>
+
+{% if error %}
+<div class="message message-error" role="alert">
+    {{ error }}
+</div>
+{% endif %}
+
+{% if results %}
+<section class="media-results">
+    <h2>Результаты поиска</h2>
+
+    <div class="media-grid">
+        {% for item in results %}
+        <article class="media-card">
+            {% if item.poster %}
+            <img
+                class="media-poster"
+                src="{{ item.poster }}"
+                alt="Постер: {{ item.title }}"
+                loading="lazy"
+            >
+            {% else %}
+            <div class="poster-placeholder" aria-label="Постер отсутствует">🎬</div>
+            {% endif %}
+
+            <div class="media-content">
+                <p class="media-type">
+                    {% if item.type == "series" %}Сериал{% else %}Фильм{% endif %}
+                </p>
+
+                <h3>{{ item.title }}</h3>
+
+                <div class="media-meta">
+                    <span>{{ item.year }}</span>
+                    <span>IMDb {{ item.rating }}</span>
+                </div>
+
+                <p class="media-genres">{{ item.genres }}</p>
+                <p class="media-plot">{{ item.plot }}</p>
+
+                <a
+                    class="imdb-link"
+                    href="https://www.imdb.com/title/{{ item.imdb_id }}/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Открыть на IMDb ↗
+                </a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% elif not query %}
+<section class="empty-state">
+    <span>🎬</span>
+    <p>Введите название фильма или сериала в строку поиска.</p>
+</section>
+{% endif %}
+{% endblock %}

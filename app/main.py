@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app.weather import get_weather
+from app.omdb import search_media
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -63,3 +64,33 @@ async def weather(
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/movies", response_class=HTMLResponse)
+async def movies(
+    request: Request,
+    query: str = Query(default="", max_length=100),
+):
+    query = query.strip()
+    results = []
+    error = None
+
+    if query:
+        try:
+            results, error = await search_media(query)
+        except httpx.HTTPError:
+            error = (
+                "Не удалось получить данные OMDb. "
+                "Проверьте соединение VPS с интернетом и попробуйте ещё раз."
+            )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies.html",
+        context={
+            "page_title": "Фильмы и сериалы",
+            "query": query,
+            "results": results,
+            "error": error,
+        },
+    )
